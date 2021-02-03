@@ -6,5 +6,9 @@ RUN curl -L -o /tmp/docker-$VERSION.tgz https://download.docker.com/linux/static
     && mv /tmp/docker/docker /usr/bin \
     && rm -rf /tmp/docker-$VERSION /tmp/docker
 
-FROM neilpang/acme.sh:latest
+FROM certbot/dns-cloudflare:v1.12.0
 COPY --from=base /usr/bin/docker /usr/bin
+COPY docker-entrypoint.sh /
+RUN chmod +x /docker-entrypoint.sh
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
